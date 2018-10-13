@@ -14,7 +14,7 @@ namespace TaskTop.Utils
             cnfg.CreateMap<Usuario, User>()
                 .MapMember(dto => dto.name, us => us.Nome)
                 .MapMember(dto => dto.phone, us => us.Telefone)
-                .MapMember(dto => dto.type, us => (UserType) us.Tipo)
+                .MapMember(dto => dto.type, us => (UserType)us.Tipo)
                 .MapMember(dto => dto.groups, us => us.UsuarioGrupos)
                 .IgnoreMember(dto => dto.password)
                 .ReverseMap()
@@ -42,6 +42,13 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.receiverName, a => a.DestinoNavigation.Nome)
                 .MapMember(dto => dto.senderId, a => a.Origem)
                 .MapMember(dto => dto.senderName, a => a.OrigemNavigation.Nome)
+                .ReverseMap();
+
+            cnfg.CreateMap<Equipamento, Equipment>()
+                .MapMember(dto => dto.description, e => e.Descricao)
+                .MapMember(dto => dto.inUse, e => e.EmUso)
+                .MapMember(dto => dto.code, e => e.Codigo)
+                .MapMember(dto => dto.active, e => e.Ativo)
                 .ReverseMap();
         };
     }
