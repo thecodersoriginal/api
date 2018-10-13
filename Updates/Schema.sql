@@ -14,6 +14,10 @@ CREATE TABLE [dbo].[Usuario]
 );
 GO
 
+CREATE UNIQUE NONCLUSTERED INDEX [IX_UsuarioLogin]
+    ON [dbo].[Usuario]([Login] ASC);
+GO
+
 CREATE TABLE [dbo].[Grupo]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
