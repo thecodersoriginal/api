@@ -12,6 +12,7 @@ namespace TaskTop.Model
         }
 
         public int Id { get; set; }
+        public string Nome { get; set; }
         public DateTime IniciadoEm { get; set; }
         public DateTime FinalizadoEm { get; set; }
         public int TarefaId { get; set; }

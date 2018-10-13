@@ -29,9 +29,9 @@ GO
 CREATE TABLE [dbo].[Tarefa]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
-	[Nome] NVARCHAR (45) NOT NULL,
 	[AgendadaEm] DATETIME NOT NULL,
 	[UsuarioId] INT NOT NULL,
+	[RepetirEm] INT NULL,
 	CONSTRAINT [PK_Tarefa] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Tarefa_Usuario] FOREIGN KEY ([UsuarioId]) REFERENCES [dbo].[Usuario] ([Id])
 );
@@ -75,6 +75,7 @@ GO
 CREATE TABLE [dbo].[SubTarefa]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
+	[Nome] NVARCHAR (45) NOT NULL,
 	[IniciadoEm] DATETIME NOT NULL,
 	[FinalizadoEm] DATETIME NOT NULL,
 	[TarefaId] INT NOT NULL,

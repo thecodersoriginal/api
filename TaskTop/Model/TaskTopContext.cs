@@ -105,6 +105,10 @@ namespace TaskTop.Model
 
                 entity.Property(e => e.IniciadoEm).HasColumnType("datetime");
 
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasMaxLength(45);
+
                 entity.HasOne(d => d.Tarefa)
                     .WithMany(p => p.SubTarefa)
                     .HasForeignKey(d => d.TarefaId)
@@ -156,10 +160,6 @@ namespace TaskTop.Model
             {
                 entity.Property(e => e.AgendadaEm).HasColumnType("datetime");
 
-                entity.Property(e => e.Nome)
-                    .IsRequired()
-                    .HasMaxLength(45);
-
                 entity.HasOne(d => d.Usuario)
                     .WithMany(p => p.Tarefa)
                     .HasForeignKey(d => d.UsuarioId)
@@ -169,6 +169,10 @@ namespace TaskTop.Model
 
             modelBuilder.Entity<Usuario>(entity =>
             {
+                entity.HasIndex(e => e.Login)
+                    .HasName("IX_UsuarioLogin")
+                    .IsUnique();
+
                 entity.Property(e => e.Chave).IsRequired();
 
                 entity.Property(e => e.Email)
@@ -185,7 +189,7 @@ namespace TaskTop.Model
 
                 entity.Property(e => e.Tipo)
                     .IsRequired();
-
+                    
                 entity.Property(e => e.Senha).IsRequired();
 
                 entity.Property(e => e.Telefone)
