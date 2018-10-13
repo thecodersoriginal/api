@@ -34,6 +34,15 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.id, gu => gu.UsuarioId)
                 .MapMember(dto => dto.name, gu => gu.Usuario.Nome)
                 .ReverseMap();
+
+            cnfg.CreateMap<Alerta, Alert>()
+                .MapMember(dto => dto.message, a => a.Mensagem)
+                .MapMember(dto => dto.readAt, a => a.VisualizadaEm)
+                .MapMember(dto => dto.receiverId, a => a.Destino)
+                .MapMember(dto => dto.receiverName, a => a.DestinoNavigation.Nome)
+                .MapMember(dto => dto.senderId, a => a.Origem)
+                .MapMember(dto => dto.senderName, a => a.OrigemNavigation.Nome)
+                .ReverseMap();
         };
     }
 }
