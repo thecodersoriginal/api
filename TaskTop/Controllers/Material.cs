@@ -3,11 +3,14 @@ using APICore.Model;
 using APICore.Model.Selection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using TaskTop.Authorization.Model;
 using TaskTop.DTO;
 using TaskTop.Model;
 using TaskTop.Utils;
@@ -17,6 +20,11 @@ namespace TaskTop.Controllers
     [Authorize]
     public class MaterialController : EntityController<Material, MaterialDTO, int>
     {
+        public class Quantity
+        {
+            public int quantity;
+        }
+
         public MaterialController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Material, int>> GetInternalId => ent => ent.Id;
@@ -33,6 +41,45 @@ namespace TaskTop.Controllers
 
         [Authorize(Roles = "Admin,Estoque")]
         public override Task<IActionResult> Add([FromBody] MaterialDTO ent) => _Add(ent);
+
+        [HttpPost]
+        public async Task<IActionResult> AddStock([FromBody] Quantity quantity, int id)
+        {
+            var material = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (material == null)
+                return NotFound();
+
+            material.QuantidadeAtual += quantity.quantity;
+
+            DbContext.Entry(material).State = EntityState.Modified;
+
+            await DbContext.SaveChangesAsync();
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveStock([FromBody] Quantity quantity, int id)
+        {
+            var material = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (material == null)
+                return NotFound();
+
+            if(material.QuantidadeAtual - quantity.quantity < 0)
+            {
+                throw new ValidationExn("Estoque insuficiente.");
+            }
+
+            material.QuantidadeAtual -= quantity.quantity;
+
+            DbContext.Entry(material).State = EntityState.Modified;
+
+            await DbContext.SaveChangesAsync();
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
 
         [Authorize(Roles = "Admin,Estoque")]
         public override Task<IActionResult> Update([FromBody] MaterialDTO ent) => _Update(ent);

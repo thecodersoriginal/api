@@ -55,6 +55,28 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.description, m => m.Descricao)
                 .MapMember(dto => dto.actualQuantity, m => m.QuantidadeAtual)
                 .ReverseMap();
+
+            cnfg.CreateMap<Tarefa, TaskDTO>()
+                .MapMember(dto => dto.name, t => t.Nome)
+                .MapMember(dto => dto.origin, t => t.Origem)
+                .MapMember(dto => dto.receiver, t => t.Destino)
+                .MapMember(dto => dto.scheduledIn, t => t.AgendadaEm)
+                .MapMember(dto => dto.iniciatedIn, t => t.IniciadoEm)
+                .MapMember(dto => dto.finishedIn, t => t.FinalizadoEm)
+                .MapMember(dto => dto.repeatIn, t => t.RepetirEm)
+                .MapMember(dto => dto.taskEquipments, t=> t.TarefaEquipamentos)
+                .MapMember(dto => dto.taskMaterials, t => t.TarefaMateriais)
+                .ReverseMap();
+
+            cnfg.CreateMap<TarefaEquipamentos, TaskEquipment>()
+                .MapMember(dto=> dto.id, e=> e.EquipamentoId)
+                .MapMember(dto => dto.description, e => e.Equipamento.Descricao)
+                .ReverseMap();
+
+            cnfg.CreateMap<TarefaMateriais, TaskMaterial>()
+                .MapMember(dto => dto.id, m => m.MaterialId)
+                .MapMember(dto => dto.description, m=> m.Material.Descricao)
+                .ReverseMap();
         };
     }
 }
