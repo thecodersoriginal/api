@@ -11,6 +11,6 @@ namespace TaskTop.Utils
         where DTO : class
         where PK : struct
     {
-        public EntityController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper, AuthController.ToOperador) { }
+        public EntityController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper, AuthExts.ToOperador) { }
     }
 }

@@ -36,7 +36,7 @@ namespace TaskTop.Authorization
         }
     }
 
-    public static class AuthController
+    public static class AuthExts
     {
         public static Operator ToOperador(List<Claim> claims)
         {
