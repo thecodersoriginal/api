@@ -43,6 +43,7 @@ CREATE TABLE [dbo].[Equipamento]
 	[Codigo] NVARCHAR (45) NOT NULL,
 	[Descricao] NVARCHAR (45) NOT NULL,
 	[EmUso] BIT NOT NULL,
+	[Ativo] BIT NOT NULL,
 	CONSTRAINT [PK_Equipamento] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 GO

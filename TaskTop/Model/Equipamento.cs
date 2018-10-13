@@ -13,6 +13,7 @@ namespace TaskTop.Model
         public string Codigo { get; set; }
         public string Descricao { get; set; }
         public bool EmUso { get; set; }
+        public bool Ativo { get; set; }
 
         public ICollection<SubTarefaEquipamentos> SubTarefaEquipamentos { get; set; }
     }
