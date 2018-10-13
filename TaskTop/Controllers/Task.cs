@@ -17,7 +17,7 @@ using TaskTop.Utils;
 namespace TaskTop.Controllers
 {
     [Authorize]
-    public class TaskController : EntityController<Tarefa, Task, int>
+    public class TaskController : EntityController<Tarefa, TaskDTO, int>
     {
 
         public class User
@@ -28,16 +28,16 @@ namespace TaskTop.Controllers
         public TaskController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Tarefa, int>> GetInternalId => ent => ent.Id;
-        public override Expression<Func<Task, int>> GetExternalId => ent => ent.Id;
+        public override Expression<Func<TaskDTO, int>> GetExternalId => ent => ent.id;
 
-        public override async Task<Tarefa> BeforeAdd(Task sendedData)
+        public override async Task<Tarefa> BeforeAdd(TaskDTO sendedData)
         {
             var equip = await base.BeforeAdd(sendedData);
 
             return equip;
         }
 
-        public override Task<Tarefa> BeforeUpdate(Tarefa oldData, Task changedData)
+        public override Task<Tarefa> BeforeUpdate(Tarefa oldData, TaskDTO changedData)
         {
             return oldData.AsTask();
         }
@@ -253,9 +253,9 @@ namespace TaskTop.Controllers
         public override Task<IActionResult> GetByKey(int? id) => _GetByKey(id);
 
         [Authorize(Roles = "Admin,Supervisor")]
-        public override Task<IActionResult> Add([FromBody] Task ent) => _Add(ent);
+        public override Task<IActionResult> Add([FromBody] TaskDTO ent) => _Add(ent);
 
         [Authorize(Roles = "Admin,Supervisor")]
-        public override Task<IActionResult> Update([FromBody] Task ent) => _Update(ent);
+        public override Task<IActionResult> Update([FromBody] TaskDTO ent) => _Update(ent);
     }
 }
