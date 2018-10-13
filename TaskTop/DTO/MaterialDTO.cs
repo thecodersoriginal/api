@@ -7,8 +7,8 @@ namespace TaskTop.DTO
 {
     public class MaterialDTO
     {
-        public int id;
-        public string description;
-        public string actualQuantity;
+        public int id { get; set; }
+        public string description { get; set; }
+        public int actualQuantity { get; set; }
     }
 }

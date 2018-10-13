@@ -17,7 +17,7 @@ namespace TaskTop.Controllers
     [Authorize]
     public class MaterialController : EntityController<Material, MaterialDTO, int>
     {
-        public EquipmentController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
+        public MaterialController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Material, int>> GetInternalId => ent => ent.Id;
         public override Expression<Func<MaterialDTO, int>> GetExternalId => ent => ent.id;
