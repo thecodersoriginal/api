@@ -15,11 +15,12 @@ namespace TaskTop.Model
         public int Id { get; set; }
         public string Nome { get; set; }
         public DateTime AgendadaEm { get; set; }
-        public DateTime IniciadoEm { get; set; }
-        public DateTime FinalizadoEm { get; set; }
+        public DateTime? IniciadoEm { get; set; }
+        public DateTime? FinalizadoEm { get; set; }
         public int Origem { get; set; }
         public int Destino { get; set; }
         public int? RepetirEm { get; set; }
+        public DateTime? InterrompidoEm { get; set; }
 
         public Usuario DestinoNavigation { get; set; }
         public Usuario OrigemNavigation { get; set; }

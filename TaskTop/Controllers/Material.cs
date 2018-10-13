@@ -46,13 +46,14 @@ namespace TaskTop.Controllers
         public async Task<IActionResult> AddStock([FromBody] Quantity quantity, int id)
         {
             var material = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
+            var tar = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
 
             if (material == null)
                 return NotFound();
+            
+            DbContext.Entry(material).State = EntityState.Modified;
 
             material.QuantidadeAtual += quantity.quantity;
-
-            DbContext.Entry(material).State = EntityState.Modified;
 
             await DbContext.SaveChangesAsync();
 

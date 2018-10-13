@@ -1,4 +1,6 @@
-﻿namespace TaskTop.Model
+﻿using System;
+
+namespace TaskTop.Model
 {
     public partial class EstoqueHistorico
     {
@@ -8,6 +10,7 @@
         public int UsuarioId { get; set; }
         public int MaterialId { get; set; }
         public int TarefaId { get; set; }
+        public DateTime Data { get; set; }
 
         public Material Material { get; set; }
         public Tarefa Tarefa { get; set; }
