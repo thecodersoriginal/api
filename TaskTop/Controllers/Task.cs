@@ -19,12 +19,19 @@ namespace TaskTop.Controllers
     [Authorize]
     public class TaskController : EntityController<Tarefa, TaskDTO, int>
     {
-
-        public class User
+        public class changeEquipment
         {
-            int id;
+            public int idTask;
+            public int idEquipment;
         }
 
+        public class changeMaterial
+        {
+            public int idTask;
+            public int idMaterial;
+            public int qtdMaterial;
+        }
+        
         public TaskController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Tarefa, int>> GetInternalId => ent => ent.Id;
@@ -61,16 +68,16 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("addmaterial")]
-        public async Task<IActionResult> AddMaterial([FromBody] TaskDTO task, TaskMaterial material)
+        public async Task<IActionResult> AddMaterial([FromBody] changeMaterial change)
         {
 
-            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
-            var mat = await DbContext.Material.SingleOrDefaultAsync(e => e.Id == material.id);
+            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
+            var mat = await DbContext.Material.SingleOrDefaultAsync(e => e.Id == change.idMaterial);
 
             if (tar == null || mat == null)
                 return NotFound();
 
-            if(mat.QuantidadeAtual - material.quantity < 0)
+            if(mat.QuantidadeAtual - change.qtdMaterial < 0)
             {
                 throw new ValidationExn("Estoque insuficiente.");
             }
@@ -85,7 +92,7 @@ namespace TaskTop.Controllers
             {
                 Material = mat,
                 MaterialId = mat.Id,
-                Quantidade = material.quantity,
+                Quantidade = change.qtdMaterial,
                 Data = DateTime.UtcNow,
                 Tarefa = tar,
                 TarefaId = tar.Id,
@@ -96,8 +103,8 @@ namespace TaskTop.Controllers
 
             TarefaMateriais materialTarefa = new TarefaMateriais
             {
-               MaterialId = material.id,
-               Quantidade = material.quantity
+               MaterialId = change.idMaterial,
+               Quantidade = change.qtdMaterial
             };
 
             DbContext.Entry(tar).State = EntityState.Modified;
@@ -106,7 +113,7 @@ namespace TaskTop.Controllers
             DbContext.EstoqueHistorico.Add(movimentacao);
 
             tar.TarefaMateriais.Add(materialTarefa);
-            mat.QuantidadeAtual -= material.quantity;
+            mat.QuantidadeAtual -= change.qtdMaterial;
 
             await DbContext.SaveChangesAsync();
 
@@ -114,11 +121,11 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("removematerial")]
-        public async Task<IActionResult> RemoveMaterial([FromBody] TaskDTO task, TaskMaterial material) //devolução de materiais
+        public async Task<IActionResult> RemoveMaterial([FromBody] changeMaterial change) //devolução de materiais
         {
 
-            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
-            var mat = await DbContext.Material.SingleOrDefaultAsync(e => e.Id == material.id);
+            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
+            var mat = await DbContext.Material.SingleOrDefaultAsync(e => e.Id == change.idMaterial);
 
             if (tar == null || mat == null)
                 return NotFound();
@@ -133,7 +140,7 @@ namespace TaskTop.Controllers
             {
                 Material = mat,
                 MaterialId = mat.Id,
-                Quantidade = material.quantity,
+                Quantidade = change.qtdMaterial,
                 Data = DateTime.UtcNow,
                 Tarefa = tar,
                 TarefaId = tar.Id,
@@ -146,7 +153,7 @@ namespace TaskTop.Controllers
 
             DbContext.EstoqueHistorico.Add(movimentacao);
 
-            mat.QuantidadeAtual += material.quantity;
+            mat.QuantidadeAtual += change.qtdMaterial;
 
             await DbContext.SaveChangesAsync();
 
@@ -154,17 +161,17 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("addequipment")]
-        public async Task<IActionResult> AddEquipment([FromBody] TaskDTO task, TaskEquipment equipment)
+        public async Task<IActionResult> AddEquipment([FromBody] changeEquipment change)
         {
-            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
-            var equi = await DbContext.Equipamento.SingleOrDefaultAsync(e => e.Id == equipment.id);
+            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
+            var equi = await DbContext.Equipamento.SingleOrDefaultAsync(e => e.Id == change.idEquipment);
 
             if (tar == null || equi == null)
                 return NotFound();
             
             TarefaEquipamentos materialEquipamentos = new TarefaEquipamentos
             {
-                EquipamentoId = equipment.id
+                EquipamentoId = change.idEquipment
             };
 
             if(equi.EmUso == true)
@@ -184,10 +191,10 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("removeequipment")]
-        public async Task<IActionResult> RemoveEquipment([FromBody] TaskDTO task, TaskEquipment equipment)//devolução de equipamento
+        public async Task<IActionResult> RemoveEquipment([FromBody] changeEquipment change)//devolução de equipamento
         {
-            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
-            var equi = await DbContext.Equipamento.SingleOrDefaultAsync(e => e.Id == equipment.id);
+            var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
+            var equi = await DbContext.Equipamento.SingleOrDefaultAsync(e => e.Id == change.idEquipment);
 
             if (tar == null || equi == null)
                 return NotFound();
@@ -220,7 +227,7 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("transfer")]
-        public async Task<IActionResult> Transfer([FromBody] TaskDTO task, User user)
+        public async Task<IActionResult> Transfer([FromBody] TaskDTO task)
         {
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
 
