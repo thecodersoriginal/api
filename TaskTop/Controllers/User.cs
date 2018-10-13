@@ -6,6 +6,7 @@ using APICore.Model.Selection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,9 +26,11 @@ namespace TaskTop.Controllers
         public override Expression<Func<Usuario, int>> GetInternalId => ent => ent.Id;
         public override Expression<Func<User, int>> GetExternalId => ent => ent.id;
 
+        public override IQueryable<Usuario> MapSource(IQueryable<Usuario> query) => query.Include(u => u.UsuarioGrupos);
+
         public override Task Validate(User data, ActionOperation operation)
         {
-            if(operation is ActionOperation.Add && data.password.IsEmpty())
+            if (operation is ActionOperation.Add && data.password.IsEmpty())
             {
                 throw new ValidationExn("Senha obrigatória.");
             }
@@ -41,7 +44,7 @@ namespace TaskTop.Controllers
                 throw new UnauthorizedExn("Usuário não autorizado para esta operação.");
 
             var usuario = await base.BeforeAdd(sendedData);
-            usuario.Tipo = (int) sendedData.type;
+            usuario.Tipo = (int)sendedData.type;
 
             var salt = Auth.GetSalt();
             var pass = Auth.GetPassword(sendedData.password, salt);
@@ -49,6 +52,14 @@ namespace TaskTop.Controllers
             usuario.Senha = pass;
             usuario.Chave = salt;
 
+            foreach (var grupo in sendedData.groups)
+            {
+                usuario.UsuarioGrupos.Add(new UsuarioGrupos
+                {
+                    GrupoId = grupo.id
+                });
+            }
+            
             return usuario;
         }
 
@@ -65,6 +76,20 @@ namespace TaskTop.Controllers
                 newData.Senha = pass;
                 newData.Chave = salt;
             }
+
+            var addGroups = changedData.groups
+                .Where(g => !oldData.UsuarioGrupos.Any(gg => gg.GrupoId == g.id))
+                .ToList();
+
+            var removeGroups = oldData.UsuarioGrupos
+                .Where(g => !changedData.groups.Any(gg => gg.id == g.GrupoId))
+                .ToList();
+
+            foreach (var addGroup in addGroups)
+                newData.UsuarioGrupos.Add(new UsuarioGrupos { GrupoId = addGroup.id });
+
+            foreach (var removeGroup in removeGroups)
+                newData.UsuarioGrupos.Remove(removeGroup);
 
             return newData;
         }

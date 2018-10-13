@@ -17,7 +17,8 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.type, us => (UserType) us.Tipo)
                 .MapMember(dto => dto.groups, us => us.UsuarioGrupos)
                 .IgnoreMember(dto => dto.password)
-                .ReverseMap();
+                .ReverseMap()
+                .IgnoreMember(us => us.UsuarioGrupos);
 
             cnfg.CreateMap<UsuarioGrupos, UserGroup>()
                 .MapMember(dto => dto.id, ug => ug.GrupoId)
