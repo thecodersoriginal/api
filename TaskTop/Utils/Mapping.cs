@@ -1,4 +1,4 @@
-using APICore.Helpers.AutoMapper;
+﻿using APICore.Helpers.AutoMapper;
 using AutoMapper;
 using System;
 using TaskTop.Authorization.Model;
@@ -22,6 +22,16 @@ namespace TaskTop.Utils
             cnfg.CreateMap<UsuarioGrupos, UserGroup>()
                 .MapMember(dto => dto.id, ug => ug.GrupoId)
                 .MapMember(dto => dto.name, ug => ug.Grupo.Descricao)
+                .ReverseMap();
+
+            cnfg.CreateMap<Grupo, Group>()
+                .MapMember(dto => dto.name, g => g.Descricao)
+                .MapMember(dto => dto.users, g => g.UsuarioGrupos)
+                .ReverseMap();
+
+            cnfg.CreateMap<UsuarioGrupos, GroupUser>()
+                .MapMember(dto => dto.id, gu => gu.UsuarioId)
+                .MapMember(dto => dto.name, gu => gu.Usuario.Nome)
                 .ReverseMap();
         };
     }
