@@ -24,8 +24,7 @@ namespace TaskTop.Controllers
 
         public override Task<Material> BeforeUpdate(Material oldData, MaterialDTO changedData)
         {
-            oldData.QuantidadeAtual = changedData.actualQuantity + oldData.QuantidadeAtual;
-            oldData.Descricao = changedData.description;
+            oldData.QuantidadeAtual = changedData.actualQuantity;
             return oldData.AsTask();
         }
 

@@ -50,6 +50,11 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.code, e => e.Codigo)
                 .MapMember(dto => dto.active, e => e.Ativo)
                 .ReverseMap();
+
+            cnfg.CreateMap<Material, MaterialDTO>()
+                .MapMember(dto => dto.description, m => m.Descricao)
+                .MapMember(dto => dto.actualQuantity, m => m.QuantidadeAtual)
+                .ReverseMap();
         };
     }
 }
