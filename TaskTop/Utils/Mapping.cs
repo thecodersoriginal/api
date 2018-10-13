@@ -63,6 +63,7 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.scheduledIn, t => t.AgendadaEm)
                 .MapMember(dto => dto.iniciatedIn, t => t.IniciadoEm)
                 .MapMember(dto => dto.finishedIn, t => t.FinalizadoEm)
+                .MapMember(dto => dto.interruptedIn, t => t.InterrompidoEm)
                 .MapMember(dto => dto.repeatIn, t => t.RepetirEm)
                 .MapMember(dto => dto.taskEquipments, t=> t.TarefaEquipamentos)
                 .MapMember(dto => dto.taskMaterials, t => t.TarefaMateriais)
@@ -75,6 +76,7 @@ namespace TaskTop.Utils
 
             cnfg.CreateMap<TarefaMateriais, TaskMaterial>()
                 .MapMember(dto => dto.id, m => m.MaterialId)
+                .MapMember(dto => dto.quantity, m => m.Quantidade)
                 .MapMember(dto => dto.description, m=> m.Material.Descricao)
                 .ReverseMap();
         };
