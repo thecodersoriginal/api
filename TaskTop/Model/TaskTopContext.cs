@@ -183,9 +183,8 @@ namespace TaskTop.Model
                     .IsRequired()
                     .HasMaxLength(120);
 
-                entity.Property(e => e.Permissao)
-                    .IsRequired()
-                    .HasMaxLength(45);
+                entity.Property(e => e.Tipo)
+                    .IsRequired();
 
                 entity.Property(e => e.Senha).IsRequired();
 

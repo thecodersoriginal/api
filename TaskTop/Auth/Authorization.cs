@@ -42,15 +42,15 @@ namespace TaskTop.Authorization
         {
             var userType = claims.GetClaim<string>(ClaimTypes.Role);
             var tipo = userType == null
-                ? default(UsuarioTipo)
-                : Enum.Parse(typeof(UsuarioTipo), userType).ChangeType<UsuarioTipo>();
+                ? default(UserType)
+                : Enum.Parse(typeof(UserType), userType).ChangeType<UserType>();
 
             return new Operator
             {
                 Id = claims.GetClaim<int>(ClaimTypes.NameIdentifier),
-                Tipo = tipo,
+                Type = tipo,
                 Email = claims.GetClaim<string>(ClaimTypes.Email),
-                Nome = claims.GetClaim<string>(ClaimTypes.Name)
+                Name = claims.GetClaim<string>(ClaimTypes.Name)
             };
         }
 
@@ -60,10 +60,10 @@ namespace TaskTop.Authorization
         public static List<Claim> ToClaims(Operator user) => new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-            new Claim(ClaimTypes.Name, user.Nome),
+            new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Tipo.ToString())
+            new Claim(ClaimTypes.Role, user.Type.ToString())
         };
     }
 }

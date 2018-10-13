@@ -21,7 +21,7 @@ namespace TaskTop.Model
         public string Email { get; set; }
         public byte[] Senha { get; set; }
         public byte[] Chave { get; set; }
-        public string Permissao { get; set; }
+        public int Tipo { get; set; }
 
         public ICollection<Alerta> AlertaDestinoNavigation { get; set; }
         public ICollection<Alerta> AlertaOrigemNavigation { get; set; }

@@ -54,9 +54,9 @@ namespace TaskTop.Controllers
                 user = new
                 {
                     id = operador.Id,
-                    nome = operador.Nome,
+                    name = operador.Name,
                     email = operador.Email,
-                    tipo = operador.Tipo.ToString().ToLower()
+                    type = operador.Type.ToString().ToLower()
                 }
             };
         }
@@ -80,21 +80,19 @@ namespace TaskTop.Controllers
             var pass = Auth.GetPassword(request.senha, usuarioSalt);
             var usuario = await DbContext.Usuario
                 .Where(u => u.Login == username && u.Senha == pass)
-                .Select(u => new { u.Id, u.Nome, u.Email, u.Permissao })
+                .Select(u => new Operator
+                {
+                    Id = u.Id,
+                    Name = u.Nome,
+                    Email = u.Email,
+                    Type = (UserType) u.Tipo
+                })
                 .SingleOrDefaultAsync();
 
             if (usuario == null)
                 throw invalidExn;
 
-            var op = new Operator
-            {
-                Id = usuario.Id,
-                Nome = usuario.Nome,
-                Email = usuario.Email,
-                Tipo = Enum.Parse(typeof(UsuarioTipo), usuario.Permissao).ChangeType<UsuarioTipo>()
-            };
-
-            return Ok(CreateToken(signConfig, tokenConfig, op));
+            return Ok(CreateToken(signConfig, tokenConfig, usuario));
         }
     }
 }

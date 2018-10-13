@@ -1,6 +1,6 @@
 ﻿namespace TaskTop.Authorization.Model
 {
-    public enum UsuarioTipo
+    public enum UserType
     {
         Admin = 1,
         Estoque = 2,
@@ -17,8 +17,8 @@
     public class Operator
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
-        public UsuarioTipo Tipo { get; set; }
+        public UserType Type { get; set; }
     }
 }
