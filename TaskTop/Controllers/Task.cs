@@ -42,7 +42,7 @@ namespace TaskTop.Controllers
             return oldData.AsTask();
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("start")]
         public async Task<IActionResult> Start([FromBody] TaskDTO task)
         {
 
@@ -60,7 +60,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("addmaterial")]
         public async Task<IActionResult> AddMaterial([FromBody] TaskDTO task, TaskMaterial material)
         {
 
@@ -113,7 +113,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("removematerial")]
         public async Task<IActionResult> RemoveMaterial([FromBody] TaskDTO task, TaskMaterial material) //devolução de materiais
         {
 
@@ -153,7 +153,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("addequipment")]
         public async Task<IActionResult> AddEquipment([FromBody] TaskDTO task, TaskEquipment equipment)
         {
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
@@ -183,7 +183,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("removeequipment")]
         public async Task<IActionResult> RemoveEquipment([FromBody] TaskDTO task, TaskEquipment equipment)//devolução de equipamento
         {
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
@@ -201,7 +201,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("finish")]
         public async Task<IActionResult> Finish([FromBody] TaskDTO task)
         {
 
@@ -219,7 +219,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("transfer")]
         public async Task<IActionResult> Transfer([FromBody] TaskDTO task, User user)
         {
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == task.id);
