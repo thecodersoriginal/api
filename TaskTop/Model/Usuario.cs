@@ -9,8 +9,8 @@ namespace TaskTop.Model
             AlertaDestinoNavigation = new HashSet<Alerta>();
             AlertaOrigemNavigation = new HashSet<Alerta>();
             EstoqueHistorico = new HashSet<EstoqueHistorico>();
-            SubTarefa = new HashSet<SubTarefa>();
-            Tarefa = new HashSet<Tarefa>();
+            TarefaDestinoNavigation = new HashSet<Tarefa>();
+            TarefaOrigemNavigation = new HashSet<Tarefa>();
             UsuarioGrupos = new HashSet<UsuarioGrupos>();
         }
 
@@ -26,8 +26,8 @@ namespace TaskTop.Model
         public ICollection<Alerta> AlertaDestinoNavigation { get; set; }
         public ICollection<Alerta> AlertaOrigemNavigation { get; set; }
         public ICollection<EstoqueHistorico> EstoqueHistorico { get; set; }
-        public ICollection<SubTarefa> SubTarefa { get; set; }
-        public ICollection<Tarefa> Tarefa { get; set; }
+        public ICollection<Tarefa> TarefaDestinoNavigation { get; set; }
+        public ICollection<Tarefa> TarefaOrigemNavigation { get; set; }
         public ICollection<UsuarioGrupos> UsuarioGrupos { get; set; }
     }
 }

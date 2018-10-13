@@ -6,7 +6,7 @@ namespace TaskTop.Model
     {
         public Equipamento()
         {
-            SubTarefaEquipamentos = new HashSet<SubTarefaEquipamentos>();
+            TarefaEquipamentos = new HashSet<TarefaEquipamentos>();
         }
 
         public int Id { get; set; }
@@ -15,6 +15,6 @@ namespace TaskTop.Model
         public bool EmUso { get; set; }
         public bool Ativo { get; set; }
 
-        public ICollection<SubTarefaEquipamentos> SubTarefaEquipamentos { get; set; }
+        public ICollection<TarefaEquipamentos> TarefaEquipamentos { get; set; }
     }
 }

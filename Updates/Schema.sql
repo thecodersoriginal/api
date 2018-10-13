@@ -26,17 +26,6 @@ CREATE TABLE [dbo].[Grupo]
 );
 GO
 
-CREATE TABLE [dbo].[Tarefa]
-(
-	[Id] INT IDENTITY (1, 1) NOT NULL,
-	[AgendadaEm] DATETIME NOT NULL,
-	[UsuarioId] INT NOT NULL,
-	[RepetirEm] INT NULL,
-	CONSTRAINT [PK_Tarefa] PRIMARY KEY CLUSTERED ([Id] ASC),
-	CONSTRAINT [FK_Tarefa_Usuario] FOREIGN KEY ([UsuarioId]) REFERENCES [dbo].[Usuario] ([Id])
-);
-GO
-
 CREATE TABLE [dbo].[Equipamento]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
@@ -57,6 +46,22 @@ CREATE TABLE [dbo].[Material]
 );
 GO
 
+CREATE TABLE [dbo].[Tarefa]
+(
+	[Id] INT IDENTITY (1, 1) NOT NULL,
+	[Nome] NVARCHAR (45) NOT NULL,
+	[AgendadaEm] DATETIME NOT NULL,
+	[IniciadoEm] DATETIME NOT NULL,
+	[FinalizadoEm] DATETIME NOT NULL,
+	[Origem] INT NOT NULL,
+	[Destino] INT NOT NULL,
+	[RepetirEm] INT NULL,
+	CONSTRAINT [PK_Tarefa] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_Origem_Tarefa] FOREIGN KEY ([Origem]) REFERENCES [dbo].[Usuario] ([Id]),
+	CONSTRAINT [FK_Destino_Tarefa] FOREIGN KEY ([Destino]) REFERENCES [dbo].[Usuario] ([Id])
+);
+GO
+
 CREATE TABLE [dbo].[EstoqueHistorico]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
@@ -72,38 +77,24 @@ CREATE TABLE [dbo].[EstoqueHistorico]
 );
 GO
 
-CREATE TABLE [dbo].[SubTarefa]
+CREATE TABLE [dbo].[TarefaMateriais]
 (
-	[Id] INT IDENTITY (1, 1) NOT NULL,
-	[Nome] NVARCHAR (45) NOT NULL,
-	[IniciadoEm] DATETIME NOT NULL,
-	[FinalizadoEm] DATETIME NOT NULL,
 	[TarefaId] INT NOT NULL,
-	[UsuarioId] INT NOT NULL,
-	CONSTRAINT [PK_SubTarefa] PRIMARY KEY CLUSTERED ([Id] ASC),
-	CONSTRAINT [FK_SubTarefa_Usuario] FOREIGN KEY ([UsuarioId]) REFERENCES [dbo].[Usuario] ([Id]),
-	CONSTRAINT [FK_SubTarefa_Tarefa] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
-);
-GO
-
-CREATE TABLE [dbo].[SubTarefaMateriais]
-(
-	[SubTarefaId] INT NOT NULL,
 	[MaterialId] INT NOT NULL,
 	[Quantidade] INT NOT NULL,
-	CONSTRAINT [PK_SubTarefaMateriais] PRIMARY KEY CLUSTERED ([SubTarefaId] ASC, [MaterialId] ASC),
-	CONSTRAINT [FK_SubTarefaMateriais_Material] FOREIGN KEY ([MaterialId]) REFERENCES [dbo].[Material] ([Id]),
-	CONSTRAINT [FK_SubTarefaMateriais_SubTarefa] FOREIGN KEY ([SubTarefaId]) REFERENCES [dbo].[SubTarefa] ([Id])
+	CONSTRAINT [PK_TarefaMateriais] PRIMARY KEY CLUSTERED ([TarefaId] ASC, [MaterialId] ASC),
+	CONSTRAINT [FK_TarefaMateriais_Material] FOREIGN KEY ([MaterialId]) REFERENCES [dbo].[Material] ([Id]),
+	CONSTRAINT [FK_TarefaMateriais_Tarefa] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
 );
 GO
 
-CREATE TABLE [dbo].[SubTarefaEquipamentos]
+CREATE TABLE [dbo].[TarefaEquipamentos]
 (
-	[SubTarefaId] INT NOT NULL,
+	[TarefaId] INT NOT NULL,
 	[EquipamentoId] INT NOT NULL,
-	CONSTRAINT [PK_SubTarefaEquipamentos] PRIMARY KEY CLUSTERED ([SubTarefaId] ASC, [EquipamentoId] ASC),
-	CONSTRAINT [FK_SubTarefaEquipamentos_Equipamento] FOREIGN KEY ([EquipamentoId]) REFERENCES [dbo].[Equipamento] ([Id]),
-	CONSTRAINT [FK_SubTarefaEquipamentos_SubTarefa] FOREIGN KEY ([SubTarefaId]) REFERENCES [dbo].[SubTarefa] ([Id])
+	CONSTRAINT [PK_TarefaEquipamentos] PRIMARY KEY CLUSTERED ([TarefaId] ASC, [EquipamentoId] ASC),
+	CONSTRAINT [FK_TarefaEquipamentos_Equipamento] FOREIGN KEY ([EquipamentoId]) REFERENCES [dbo].[Equipamento] ([Id]),
+	CONSTRAINT [FK_TarefaEquipamentos_Tarefa] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
 );
 GO
 

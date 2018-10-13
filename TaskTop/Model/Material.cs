@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TaskTop.Model
 {
@@ -7,7 +8,7 @@ namespace TaskTop.Model
         public Material()
         {
             EstoqueHistorico = new HashSet<EstoqueHistorico>();
-            SubTarefaMateriais = new HashSet<SubTarefaMateriais>();
+            TarefaMateriais = new HashSet<TarefaMateriais>();
         }
 
         public int Id { get; set; }
@@ -15,6 +16,6 @@ namespace TaskTop.Model
         public int QuantidadeAtual { get; set; }
 
         public ICollection<EstoqueHistorico> EstoqueHistorico { get; set; }
-        public ICollection<SubTarefaMateriais> SubTarefaMateriais { get; set; }
+        public ICollection<TarefaMateriais> TarefaMateriais { get; set; }
     }
 }

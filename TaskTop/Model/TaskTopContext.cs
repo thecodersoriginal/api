@@ -18,10 +18,9 @@ namespace TaskTop.Model
         public virtual DbSet<EstoqueHistorico> EstoqueHistorico { get; set; }
         public virtual DbSet<Grupo> Grupo { get; set; }
         public virtual DbSet<Material> Material { get; set; }
-        public virtual DbSet<SubTarefa> SubTarefa { get; set; }
-        public virtual DbSet<SubTarefaEquipamentos> SubTarefaEquipamentos { get; set; }
-        public virtual DbSet<SubTarefaMateriais> SubTarefaMateriais { get; set; }
         public virtual DbSet<Tarefa> Tarefa { get; set; }
+        public virtual DbSet<TarefaEquipamentos> TarefaEquipamentos { get; set; }
+        public virtual DbSet<TarefaMateriais> TarefaMateriais { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<UsuarioGrupos> UsuarioGrupos { get; set; }
 
@@ -99,8 +98,10 @@ namespace TaskTop.Model
                     .HasMaxLength(45);
             });
 
-            modelBuilder.Entity<SubTarefa>(entity =>
+            modelBuilder.Entity<Tarefa>(entity =>
             {
+                entity.Property(e => e.AgendadaEm).HasColumnType("datetime");
+
                 entity.Property(e => e.FinalizadoEm).HasColumnType("datetime");
 
                 entity.Property(e => e.IniciadoEm).HasColumnType("datetime");
@@ -109,62 +110,51 @@ namespace TaskTop.Model
                     .IsRequired()
                     .HasMaxLength(45);
 
-                entity.HasOne(d => d.Tarefa)
-                    .WithMany(p => p.SubTarefa)
-                    .HasForeignKey(d => d.TarefaId)
+                entity.HasOne(d => d.DestinoNavigation)
+                    .WithMany(p => p.TarefaDestinoNavigation)
+                    .HasForeignKey(d => d.Destino)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefa_Tarefa");
+                    .HasConstraintName("FK_Destino_Tarefa");
 
-                entity.HasOne(d => d.Usuario)
-                    .WithMany(p => p.SubTarefa)
-                    .HasForeignKey(d => d.UsuarioId)
+                entity.HasOne(d => d.OrigemNavigation)
+                    .WithMany(p => p.TarefaOrigemNavigation)
+                    .HasForeignKey(d => d.Origem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefa_Usuario");
+                    .HasConstraintName("FK_Origem_Tarefa");
             });
 
-            modelBuilder.Entity<SubTarefaEquipamentos>(entity =>
+            modelBuilder.Entity<TarefaEquipamentos>(entity =>
             {
-                entity.HasKey(e => new { e.SubTarefaId, e.EquipamentoId });
+                entity.HasKey(e => new { e.TarefaId, e.EquipamentoId });
 
                 entity.HasOne(d => d.Equipamento)
-                    .WithMany(p => p.SubTarefaEquipamentos)
+                    .WithMany(p => p.TarefaEquipamentos)
                     .HasForeignKey(d => d.EquipamentoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefaEquipamentos_Equipamento");
+                    .HasConstraintName("FK_TarefaEquipamentos_Equipamento");
 
-                entity.HasOne(d => d.SubTarefa)
-                    .WithMany(p => p.SubTarefaEquipamentos)
-                    .HasForeignKey(d => d.SubTarefaId)
+                entity.HasOne(d => d.Tarefa)
+                    .WithMany(p => p.TarefaEquipamentos)
+                    .HasForeignKey(d => d.TarefaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefaEquipamentos_SubTarefa");
+                    .HasConstraintName("FK_TarefaEquipamentos_Tarefa");
             });
 
-            modelBuilder.Entity<SubTarefaMateriais>(entity =>
+            modelBuilder.Entity<TarefaMateriais>(entity =>
             {
-                entity.HasKey(e => new { e.SubTarefaId, e.MaterialId });
+                entity.HasKey(e => new { e.TarefaId, e.MaterialId });
 
                 entity.HasOne(d => d.Material)
-                    .WithMany(p => p.SubTarefaMateriais)
+                    .WithMany(p => p.TarefaMateriais)
                     .HasForeignKey(d => d.MaterialId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefaMateriais_Material");
+                    .HasConstraintName("FK_TarefaMateriais_Material");
 
-                entity.HasOne(d => d.SubTarefa)
-                    .WithMany(p => p.SubTarefaMateriais)
-                    .HasForeignKey(d => d.SubTarefaId)
+                entity.HasOne(d => d.Tarefa)
+                    .WithMany(p => p.TarefaMateriais)
+                    .HasForeignKey(d => d.TarefaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubTarefaMateriais_SubTarefa");
-            });
-
-            modelBuilder.Entity<Tarefa>(entity =>
-            {
-                entity.Property(e => e.AgendadaEm).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Usuario)
-                    .WithMany(p => p.Tarefa)
-                    .HasForeignKey(d => d.UsuarioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tarefa_Usuario");
+                    .HasConstraintName("FK_TarefaMateriais_Tarefa");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
