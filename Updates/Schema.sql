@@ -70,7 +70,7 @@ CREATE TABLE [dbo].[EstoqueHistorico]
 	[Tipo] CHAR(1) NOT NULL,
 	[UsuarioId] INT NOT NULL,
 	[MaterialId] INT NOT NULL,
-	[TarefaId] INT NOT NULL,
+	[TarefaId] INT NULL,
 	[Data] DATETIME NOT NULL,
 	CONSTRAINT [PK_EstoqueHistorico] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_EstoqueHistorico_Usuario] FOREIGN KEY ([UsuarioId]) REFERENCES [dbo].[Usuario] ([Id]),
@@ -97,6 +97,17 @@ CREATE TABLE [dbo].[TarefaEquipamentos]
 	CONSTRAINT [PK_TarefaEquipamentos] PRIMARY KEY CLUSTERED ([TarefaId] ASC, [EquipamentoId] ASC),
 	CONSTRAINT [FK_TarefaEquipamentos_Equipamento] FOREIGN KEY ([EquipamentoId]) REFERENCES [dbo].[Equipamento] ([Id]),
 	CONSTRAINT [FK_TarefaEquipamentos_Tarefa] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
+);
+GO
+
+CREATE TABLE [dbo].[TarefaAvaliacao]
+(
+	[Id] INT IDENTITY (1, 1) NOT NULL,
+	[TarefaId] INT NOT NULL,
+	[Nota] INT NOT NULL,
+	[NotaMaxima] INT NOT NULL,
+	CONSTRAINT [PK_TarefaAvaliacao] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_Tarefa_TarefaAvaliacao] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
 );
 GO
 

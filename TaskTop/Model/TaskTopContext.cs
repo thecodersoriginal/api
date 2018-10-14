@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TaskTop.Model
 {
@@ -19,6 +21,7 @@ namespace TaskTop.Model
         public virtual DbSet<Grupo> Grupo { get; set; }
         public virtual DbSet<Material> Material { get; set; }
         public virtual DbSet<Tarefa> Tarefa { get; set; }
+        public virtual DbSet<TarefaAvaliacao> TarefaAvaliacao { get; set; }
         public virtual DbSet<TarefaEquipamentos> TarefaEquipamentos { get; set; }
         public virtual DbSet<TarefaMateriais> TarefaMateriais { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
@@ -60,6 +63,8 @@ namespace TaskTop.Model
 
             modelBuilder.Entity<EstoqueHistorico>(entity =>
             {
+                entity.Property(e => e.Data).HasColumnType("datetime");
+
                 entity.Property(e => e.Tipo)
                     .IsRequired()
                     .HasMaxLength(1)
@@ -74,7 +79,6 @@ namespace TaskTop.Model
                 entity.HasOne(d => d.Tarefa)
                     .WithMany(p => p.EstoqueHistorico)
                     .HasForeignKey(d => d.TarefaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EstoqueHistorico_Material");
 
                 entity.HasOne(d => d.Usuario)
@@ -106,6 +110,8 @@ namespace TaskTop.Model
 
                 entity.Property(e => e.IniciadoEm).HasColumnType("datetime");
 
+                entity.Property(e => e.InterrompidoEm).HasColumnType("datetime");
+
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasMaxLength(45);
@@ -121,6 +127,15 @@ namespace TaskTop.Model
                     .HasForeignKey(d => d.Origem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Origem_Tarefa");
+            });
+
+            modelBuilder.Entity<TarefaAvaliacao>(entity =>
+            {
+                entity.HasOne(d => d.Tarefa)
+                    .WithMany(p => p.TarefaAvaliacao)
+                    .HasForeignKey(d => d.TarefaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tarefa_TarefaAvaliacao");
             });
 
             modelBuilder.Entity<TarefaEquipamentos>(entity =>

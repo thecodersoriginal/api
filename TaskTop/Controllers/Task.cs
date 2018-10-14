@@ -1,5 +1,4 @@
-﻿using APICore.Helpers.WebApi;
-using APICore.Model;
+﻿using APICore.Model;
 using APICore.Model.Selection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TaskTop.DTO;
@@ -33,6 +31,13 @@ namespace TaskTop.Controllers
     {
         public int taskId { get; set; }
         public int userId { get; set; }
+    }
+
+    public class TransferRate
+    {
+        public int taskId { get; set; }
+        public int rate { get; set; }
+        public int rateMax { get; set; }
     }
 
     [Authorize]
@@ -82,6 +87,20 @@ namespace TaskTop.Controllers
             tsk.FinalizadoEm = DateTime.UtcNow;
 
             DbContext.Entry(tsk).State = EntityState.Modified;
+
+            await DbContext.SaveChangesAsync();
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        [HttpPost, ActionName("rate")]
+        public async Task<IActionResult> Rate([FromBody] TransferRate ent)
+        {
+            DbContext.TarefaAvaliacao.Add(new TarefaAvaliacao {
+                Nota = ent.rate,
+                NotaMaxima = ent.rateMax,
+                TarefaId = ent.taskId
+            });
 
             await DbContext.SaveChangesAsync();
 
@@ -169,10 +188,10 @@ namespace TaskTop.Controllers
                 Quantidade = ent.quantity,
                 Data = DateTime.UtcNow,
                 TarefaId = ent.taskId,
-                Tipo = "E", 
+                Tipo = "E",
                 UsuarioId = Operator.Id,
             });
-            
+
             material.QuantidadeAtual += ent.quantity;
 
             DbContext.Entry(material).State = EntityState.Modified;
@@ -190,10 +209,10 @@ namespace TaskTop.Controllers
 
             if (equip == null)
                 return NotFound();
-          
+
             if (equip.EmUso == true)
                 throw new ValidationExn("Equipamento já está em uso.");
-            
+
             DbContext.TarefaEquipamentos.Add(new TarefaEquipamentos
             {
                 EquipamentoId = ent.equipmentId
@@ -216,7 +235,7 @@ namespace TaskTop.Controllers
 
             if (equip == null)
                 return NotFound();
-            
+
             equip.EmUso = false;
 
             DbContext.Entry(equip).State = EntityState.Modified;
@@ -225,7 +244,7 @@ namespace TaskTop.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
-        
+
         public override Task<IActionResult> GetAll([FromBody] APIQuery query) => _GetAll(query);
         public override Task<IActionResult> GetByKey(int? id) => _GetByKey(id);
 
