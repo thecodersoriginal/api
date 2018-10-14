@@ -84,6 +84,18 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.quantity, m => m.Quantidade)
                 .MapMember(dto => dto.description, m=> m.Material.Descricao)
                 .ReverseMap();
+
+            cnfg.CreateMap<EstoqueHistorico, StockHistory>()
+                .MapMember(dto => dto.quantity, e => e.Quantidade)
+                .MapMember(dto => dto.type, e=> e.Tipo)
+                .MapMember(dto => dto.userId, e=> e.UsuarioId)
+                .MapMember(dto => dto.materialId, e=> e.MaterialId)
+                .MapMember(dto => dto.taskId, e=> e.TarefaId)
+                .MapMember(dto => dto.date, e=> e.Data)
+                .MapMember(dto => dto.userName, e=> e.Usuario.Nome)
+                .MapMember(dto => dto.materialName, e=> e.Material.Nome)
+                .MapMember(dto => dto.taskName, e=> e.Tarefa.Nome)
+                .ReverseMap();
         };
     }
 }
