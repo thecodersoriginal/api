@@ -116,6 +116,11 @@ namespace TaskTop.Model
                     .IsRequired()
                     .HasMaxLength(45);
 
+                entity.HasOne(d => d.Avaliacao)
+                    .WithMany(p => p.Tarefa)
+                    .HasForeignKey(d => d.AvaliacaoId)
+                    .HasConstraintName("FK_TarefaAvaliacao_Tarefa");
+
                 entity.HasOne(d => d.DestinoNavigation)
                     .WithMany(p => p.TarefaDestinoNavigation)
                     .HasForeignKey(d => d.Destino)
@@ -127,15 +132,6 @@ namespace TaskTop.Model
                     .HasForeignKey(d => d.Origem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Origem_Tarefa");
-            });
-
-            modelBuilder.Entity<TarefaAvaliacao>(entity =>
-            {
-                entity.HasOne(d => d.Tarefa)
-                    .WithMany(p => p.TarefaAvaliacao)
-                    .HasForeignKey(d => d.TarefaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tarefa_TarefaAvaliacao");
             });
 
             modelBuilder.Entity<TarefaEquipamentos>(entity =>
@@ -192,9 +188,6 @@ namespace TaskTop.Model
                     .IsRequired()
                     .HasMaxLength(120);
 
-                entity.Property(e => e.Tipo)
-                    .IsRequired();
-                    
                 entity.Property(e => e.Senha).IsRequired();
 
                 entity.Property(e => e.Telefone)

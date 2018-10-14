@@ -33,7 +33,7 @@ namespace TaskTop.Controllers
         public int userId { get; set; }
     }
 
-    public class TransferRate
+    public class RateTask
     {
         public int taskId { get; set; }
         public int rate { get; set; }
@@ -54,6 +54,7 @@ namespace TaskTop.Controllers
             tarefa.IniciadoEm = null;
             tarefa.FinalizadoEm = null;
             tarefa.InterrompidoEm = null;
+            tarefa.Avaliacao = null;
             tarefa.Origem = Operator.Id;
 
             return tarefa;
@@ -94,13 +95,17 @@ namespace TaskTop.Controllers
         }
 
         [HttpPost, ActionName("rate")]
-        public async Task<IActionResult> Rate([FromBody] TransferRate ent)
+        public async Task<IActionResult> Rate([FromBody] RateTask ent)
         {
-            DbContext.TarefaAvaliacao.Add(new TarefaAvaliacao {
+            var tsk = await InitialQuery.SingleOrDefaultAsync(t => t.Id == ent.taskId);
+
+            tsk.Avaliacao = new TarefaAvaliacao
+            {
                 Nota = ent.rate,
-                NotaMaxima = ent.rateMax,
-                TarefaId = ent.taskId
-            });
+                NotaMaxima = ent.rateMax
+            };
+
+            DbContext.Entry(tsk).State = EntityState.Modified;
 
             await DbContext.SaveChangesAsync();
 

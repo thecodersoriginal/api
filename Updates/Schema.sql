@@ -46,6 +46,15 @@ CREATE TABLE [dbo].[Material]
 );
 GO
 
+CREATE TABLE [dbo].[TarefaAvaliacao]
+(
+	[Id] INT IDENTITY (1, 1) NOT NULL,
+	[Nota] INT NOT NULL,
+	[NotaMaxima] INT NOT NULL,
+	CONSTRAINT [PK_TarefaAvaliacao] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+GO
+
 CREATE TABLE [dbo].[Tarefa]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
@@ -57,9 +66,11 @@ CREATE TABLE [dbo].[Tarefa]
 	[Origem] INT NOT NULL,
 	[Destino] INT NOT NULL,
 	[RepetirEm] INT NULL,
+	[AvaliacaoId] INT NULL,
 	CONSTRAINT [PK_Tarefa] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Origem_Tarefa] FOREIGN KEY ([Origem]) REFERENCES [dbo].[Usuario] ([Id]),
-	CONSTRAINT [FK_Destino_Tarefa] FOREIGN KEY ([Destino]) REFERENCES [dbo].[Usuario] ([Id])
+	CONSTRAINT [FK_Destino_Tarefa] FOREIGN KEY ([Destino]) REFERENCES [dbo].[Usuario] ([Id]),
+	CONSTRAINT [FK_TarefaAvaliacao_Tarefa] FOREIGN KEY ([AvaliacaoId]) REFERENCES [dbo].[TarefaAvaliacao] ([Id])
 );
 GO
 
@@ -97,17 +108,6 @@ CREATE TABLE [dbo].[TarefaEquipamentos]
 	CONSTRAINT [PK_TarefaEquipamentos] PRIMARY KEY CLUSTERED ([TarefaId] ASC, [EquipamentoId] ASC),
 	CONSTRAINT [FK_TarefaEquipamentos_Equipamento] FOREIGN KEY ([EquipamentoId]) REFERENCES [dbo].[Equipamento] ([Id]),
 	CONSTRAINT [FK_TarefaEquipamentos_Tarefa] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
-);
-GO
-
-CREATE TABLE [dbo].[TarefaAvaliacao]
-(
-	[Id] INT IDENTITY (1, 1) NOT NULL,
-	[TarefaId] INT NOT NULL,
-	[Nota] INT NOT NULL,
-	[NotaMaxima] INT NOT NULL,
-	CONSTRAINT [PK_TarefaAvaliacao] PRIMARY KEY CLUSTERED ([Id] ASC),
-	CONSTRAINT [FK_Tarefa_TarefaAvaliacao] FOREIGN KEY ([TarefaId]) REFERENCES [dbo].[Tarefa] ([Id])
 );
 GO
 

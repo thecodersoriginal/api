@@ -8,7 +8,6 @@ namespace TaskTop.Model
         public Tarefa()
         {
             EstoqueHistorico = new HashSet<EstoqueHistorico>();
-            TarefaAvaliacao = new HashSet<TarefaAvaliacao>();
             TarefaEquipamentos = new HashSet<TarefaEquipamentos>();
             TarefaMateriais = new HashSet<TarefaMateriais>();
         }
@@ -22,11 +21,12 @@ namespace TaskTop.Model
         public int Origem { get; set; }
         public int Destino { get; set; }
         public int? RepetirEm { get; set; }
+        public int? AvaliacaoId { get; set; }
 
+        public TarefaAvaliacao Avaliacao { get; set; }
         public Usuario DestinoNavigation { get; set; }
         public Usuario OrigemNavigation { get; set; }
         public ICollection<EstoqueHistorico> EstoqueHistorico { get; set; }
-        public ICollection<TarefaAvaliacao> TarefaAvaliacao { get; set; }
         public ICollection<TarefaEquipamentos> TarefaEquipamentos { get; set; }
         public ICollection<TarefaMateriais> TarefaMateriais { get; set; }
     }

@@ -30,7 +30,8 @@ namespace TaskTop.DTO
         public int receiverId { get; set; }
         public string receiverName { get; set; }
         public int? repeatInDays { get; set; }
-        
+        public int? rateId { get; set; }
+
         public List<TaskEquipment> equipments { get; set; }
         public List<TaskMaterial> materials { get; set; }
     }

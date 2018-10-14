@@ -69,6 +69,7 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.repeatInDays, t => t.RepetirEm)
                 .MapMember(dto => dto.equipments, t=> t.TarefaEquipamentos)
                 .MapMember(dto => dto.materials, t => t.TarefaMateriais)
+                .MapMember(dto => dto.rateId, t => t.AvaliacaoId)
                 .ReverseMap()
                 .IgnoreMember(t => t.OrigemNavigation)
                 .IgnoreMember(t => t.DestinoNavigation);
