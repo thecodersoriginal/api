@@ -52,7 +52,7 @@ namespace TaskTop.Controllers
             return equip;
         }
 
-        [HttpPost, ActionName("start")]
+        [HttpGet, ActionName("start")]
         public async Task<IActionResult> Start(int id)
         {
             var tsk = await InitialQuery.SingleOrDefaultAsync(t => t.Id == id);
@@ -69,7 +69,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost, ActionName("finish")]
+        [HttpGet, ActionName("finish")]
         public async Task<IActionResult> Finish(int id)
         {
             var tsk = await InitialQuery.SingleOrDefaultAsync(t => t.Id == id);

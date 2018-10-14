@@ -1,16 +1,10 @@
-using APICore.Helpers.WebApi;
-using APICore.Model;
 using APICore.Model.Selection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using TaskTop.Authorization.Model;
 using TaskTop.DTO;
 using TaskTop.Model;
 using TaskTop.Utils;
