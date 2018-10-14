@@ -125,7 +125,8 @@ namespace TaskTop.Controllers
         {
 
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
-            var mat = await DbContext.Material.SingleOrDefaultAsync(e => e.Id == change.idMaterial);
+            var matTar = await DbContext.TarefaMateriais.SingleOrDefaultAsync(m => m.MaterialId == change.idMaterial && m.TarefaId == change.idTask);
+            var mat = await DbContext.Material.SingleOrDefaultAsync(m => m.Id == change.idMaterial);
 
             if (tar == null || mat == null)
                 return NotFound();
@@ -149,9 +150,11 @@ namespace TaskTop.Controllers
                 UsuarioId = usu.Id,
             };
 
+            DbContext.Entry(tar).State = EntityState.Modified;
             DbContext.Entry(mat).State = EntityState.Modified;
 
             DbContext.EstoqueHistorico.Add(movimentacao);
+            DbContext.TarefaMateriais.Remove(matTar);
 
             mat.QuantidadeAtual += change.qtdMaterial;
 
@@ -195,11 +198,15 @@ namespace TaskTop.Controllers
         {
             var tar = await InitialQuery.SingleOrDefaultAsync(t => t.Id == change.idTask);
             var equi = await DbContext.Equipamento.SingleOrDefaultAsync(e => e.Id == change.idEquipment);
+            var equiTar = await DbContext.TarefaEquipamentos.SingleOrDefaultAsync(e => e.EquipamentoId == change.idEquipment && e.TarefaId == change.idTask);
 
-            if (tar == null || equi == null)
+            if (tar == null || equiTar == null)
                 return NotFound();
             
+            DbContext.Entry(tar).State = EntityState.Modified;
             DbContext.Entry(equi).State = EntityState.Modified;
+
+            tar.TarefaEquipamentos.Remove(equiTar);
 
             equi.EmUso = false;
 
