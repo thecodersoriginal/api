@@ -264,7 +264,7 @@ namespace TaskTop.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPost, ActionName("equipment")]
+        [HttpDelete, ActionName("equipment")]
         public async Task<IActionResult> RemoveEquipment([FromBody] ChangeEquipment ent)
         {
             var equip = await DbContext.Equipamento
