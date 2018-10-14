@@ -28,11 +28,13 @@ namespace TaskTop.Controllers
     {
         private readonly TaskTopContext DbContext;
         private readonly IMapper EntMapper;
-        private readonly Operator Operator;
+        private Operator Operator
+        {
+            get { return AuthExts.ToOperador(User.Identity); }
+        }
 
         public StockController(TaskTopContext db, IMapper mapper)
         {
-            Operator = AuthExts.ToOperador(User.Identity);
             EntMapper = mapper;
             DbContext = db;
         }
