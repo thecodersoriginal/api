@@ -50,12 +50,15 @@ namespace TaskTop.Controllers
 
         public override async Task<Tarefa> BeforeAdd(TaskDTO sendedData)
         {
+            if (sendedData.name == null)
+                throw new BadRequestExn("Campo nome obrigatório");
+
             var tarefa = await base.BeforeAdd(sendedData);
             tarefa.IniciadoEm = null;
             tarefa.FinalizadoEm = null;
             tarefa.InterrompidoEm = null;
             tarefa.Avaliacao = null;
-            tarefa.Origem = Operator.Id;
+            tarefa.Origem = tarefa.Origem == 0 ? Operator.Id : tarefa.Origem;
 
             return tarefa;
         }
@@ -74,7 +77,7 @@ namespace TaskTop.Controllers
 
             await DbContext.SaveChangesAsync();
 
-            return StatusCode(StatusCodes.Status204NoContent);
+            return Ok(new { ok = true });
         }
 
         [HttpGet, ActionName("finish")]
@@ -91,7 +94,7 @@ namespace TaskTop.Controllers
 
             await DbContext.SaveChangesAsync();
 
-            return StatusCode(StatusCodes.Status204NoContent);
+            return Ok(new { ok = true });
         }
 
         [HttpPost, ActionName("rate")]
