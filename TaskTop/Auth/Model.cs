@@ -10,8 +10,8 @@
 
     public class LoginRequest
     {
-        public string usuario { get; set; }
-        public string senha { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
     }
 
     public class Operator

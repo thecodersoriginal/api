@@ -68,7 +68,7 @@ namespace TaskTop.Controllers
             [FromServices] TokenConfig tokenConfig)
         {
             var invalidExn = new ValidationExn("Nome de usuário ou senha está incorreto.");
-            var username = request.usuario.ToTrim();
+            var username = request.username.ToTrim();
             var usuarioSalt = await DbContext.Usuario
                 .Where(u => u.Login == username)
                 .Select(u => u.Chave)
@@ -77,7 +77,7 @@ namespace TaskTop.Controllers
             if (usuarioSalt == null)
                 throw invalidExn;
 
-            var pass = Auth.GetPassword(request.senha, usuarioSalt);
+            var pass = Auth.GetPassword(request.password, usuarioSalt);
             var usuario = await DbContext.Usuario
                 .Where(u => u.Login == username && u.Senha == pass)
                 .Select(u => new Operator
