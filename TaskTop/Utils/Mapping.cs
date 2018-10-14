@@ -65,7 +65,7 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.scheduledAt, t => t.AgendadaEm)
                 .MapMember(dto => dto.startedAt, t => t.IniciadoEm)
                 .MapMember(dto => dto.finishedAt, t => t.FinalizadoEm)
-                .MapMember(dto => dto.interruptedIn, t => t.InterrompidoEm)
+                .MapMember(dto => dto.interruptedAt, t => t.InterrompidoEm)
                 .MapMember(dto => dto.repeatInDays, t => t.RepetirEm)
                 .MapMember(dto => dto.equipments, t=> t.TarefaEquipamentos)
                 .MapMember(dto => dto.materials, t => t.TarefaMateriais)

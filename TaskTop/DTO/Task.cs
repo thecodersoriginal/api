@@ -23,7 +23,7 @@ namespace TaskTop.DTO
         public DateTime scheduledAt { get; set; }
         public DateTime? startedAt { get; set; }
         public DateTime? finishedAt { get; set; }
-        public DateTime? interruptedIn { get; set; }
+        public DateTime? interruptedAt { get; set; }
 
         public int senderId { get; set; }
         public string senderName { get; set; }
