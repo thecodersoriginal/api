@@ -177,13 +177,16 @@ namespace TaskTop.Controllers
                 UsuarioId = Operator.Id
             });
 
-            DbContext.TarefaMateriais.Add(new TarefaMateriais
+            if (!await DbContext.TarefaMateriais.AnyAsync(x => x.MaterialId == ent.materialId && x.TarefaId == task.Id))
             {
-                Tarefa = task,
-                TarefaId = task.Id,
-                MaterialId = ent.materialId,
-                Quantidade = ent.quantity
-            });
+                DbContext.TarefaMateriais.Add(new TarefaMateriais
+                {
+                    Tarefa = task,
+                    TarefaId = task.Id,
+                    MaterialId = ent.materialId,
+                    Quantidade = ent.quantity
+                });
+            }
 
             material.QuantidadeAtual -= ent.quantity;
 
@@ -249,10 +252,13 @@ namespace TaskTop.Controllers
             if (task == null)
                 throw new ValidationExn("Usuário sem tarefas abertas.");
 
-            task.TarefaEquipamentos.Add(new TarefaEquipamentos
+            if (!await DbContext.TarefaEquipamentos.AnyAsync(x => x.EquipamentoId == ent.equipmentId && x.TarefaId == task.Id))
             {
-                EquipamentoId = ent.equipmentId
-            });
+                task.TarefaEquipamentos.Add(new TarefaEquipamentos
+                {
+                    EquipamentoId = ent.equipmentId
+                });
+            }
 
             equip.EmUso = true;
 
