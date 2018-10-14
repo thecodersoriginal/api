@@ -20,11 +20,6 @@ namespace TaskTop.Controllers
     [Authorize]
     public class MaterialController : EntityController<Material, MaterialDTO, int>
     {
-        public class Quantity
-        {
-            public int quantity;
-        }
-
         public MaterialController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Material, int>> GetInternalId => ent => ent.Id;
@@ -41,47 +36,6 @@ namespace TaskTop.Controllers
 
         [Authorize(Roles = "Admin,Estoque")]
         public override Task<IActionResult> Add([FromBody] MaterialDTO ent) => _Add(ent);
-
-        [HttpPost]
-        public async Task<IActionResult> AddStock([FromBody] Quantity quantity, int id)
-        {
-            var material = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-                return NotFound();
-            
-            DbContext.Entry(material).State = EntityState.Modified;
-
-            material.QuantidadeAtual += quantity.quantity;
-
-            await DbContext.SaveChangesAsync();
-
-            return StatusCode(StatusCodes.Status204NoContent);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoveStock([FromBody] Quantity quantity, int id)
-        {
-            var material = await InitialQuery.SingleOrDefaultAsync(m => m.Id == id);
-
-            if (material == null)
-                return NotFound();
-            
-            var matTarefa = await DbContext.TarefaMateriais.SingleOrDefaultAsync(t => t.MaterialId == id);
-
-            if (material.QuantidadeAtual - quantity.quantity < 0)
-            {
-                throw new ValidationExn("Estoque insuficiente.");
-            }
-            
-            DbContext.Entry(material).State = EntityState.Modified;
-
-            material.QuantidadeAtual -= quantity.quantity;
-
-            await DbContext.SaveChangesAsync();
-
-            return StatusCode(StatusCodes.Status204NoContent);
-        }
 
         [Authorize(Roles = "Admin,Estoque")]
         public override Task<IActionResult> Update([FromBody] MaterialDTO ent) => _Update(ent);

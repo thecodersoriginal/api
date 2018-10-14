@@ -9,7 +9,7 @@ namespace TaskTop.Model
         public string Tipo { get; set; }
         public int UsuarioId { get; set; }
         public int MaterialId { get; set; }
-        public int TarefaId { get; set; }
+        public int? TarefaId { get; set; }
         public DateTime Data { get; set; }
 
         public Material Material { get; set; }
