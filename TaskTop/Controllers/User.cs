@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -80,12 +81,14 @@ namespace TaskTop.Controllers
                 newData.Chave = salt;
             }
 
-            var addGroups = changedData.groups
+            var groups = changedData.groups ?? new List<UserGroup>();
+
+            var addGroups = groups
                 .Where(g => !oldData.UsuarioGrupos.Any(gg => gg.GrupoId == g.id))
                 .ToList();
 
             var removeGroups = oldData.UsuarioGrupos
-                .Where(g => !changedData.groups.Any(gg => gg.id == g.GrupoId))
+                .Where(g => !groups.Any(gg => gg.id == g.GrupoId))
                 .ToList();
 
             foreach (var addGroup in addGroups)
