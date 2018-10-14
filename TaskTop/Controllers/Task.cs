@@ -161,7 +161,7 @@ namespace TaskTop.Controllers
             var task = await DbContext.Tarefa
                 .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
                 .OrderByDescending(t => t.IniciadoEm)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (task == null)
                 throw new ValidationExn("Usuário sem tarefas abertas.");
@@ -204,7 +204,7 @@ namespace TaskTop.Controllers
             var task = await DbContext.Tarefa
                 .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
                 .OrderByDescending(t => t.IniciadoEm)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (task == null)
                 throw new ValidationExn("Usuário sem tarefas abertas.");
@@ -244,7 +244,7 @@ namespace TaskTop.Controllers
             var task = await DbContext.Tarefa
                 .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
                 .OrderByDescending(t => t.IniciadoEm)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (task == null)
                 throw new ValidationExn("Usuário sem tarefas abertas.");
