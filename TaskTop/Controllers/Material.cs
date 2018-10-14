@@ -25,19 +25,10 @@ namespace TaskTop.Controllers
         public override Expression<Func<Material, int>> GetInternalId => ent => ent.Id;
         public override Expression<Func<MaterialDTO, int>> GetExternalId => ent => ent.id;
 
-        public override Task<Material> BeforeUpdate(Material oldData, MaterialDTO changedData)
-        {
-            oldData.QuantidadeAtual = changedData.actualQuantity;
-            return oldData.AsTask();
-        }
-
         public override Task<IActionResult> GetAll([FromBody] APIQuery query) => _GetAll(query);
         public override Task<IActionResult> GetByKey(int? id) => _GetByKey(id);
 
         [Authorize(Roles = "Admin,Estoque")]
         public override Task<IActionResult> Add([FromBody] MaterialDTO ent) => _Add(ent);
-
-        [Authorize(Roles = "Admin,Estoque")]
-        public override Task<IActionResult> Update([FromBody] MaterialDTO ent) => _Update(ent);
     }
 }
