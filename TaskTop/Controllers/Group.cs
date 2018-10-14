@@ -4,6 +4,7 @@ using APICore.Model.Selection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,6 +26,8 @@ namespace TaskTop.Controllers
         public override Task<IActionResult> GetAll([FromBody] APIQuery query) => _GetAll(query);
         public override Task<IActionResult> GetByKey(int? id) => _GetByKey(id);
 
+        public override IQueryable<Grupo> MapSource(IQueryable<Grupo> query) => query.Include(g => g.UsuarioGrupos);
+
         public override Task<Grupo> BeforeAdd(Group sendedData)
         {
             var grupo = new Grupo
@@ -39,9 +42,7 @@ namespace TaskTop.Controllers
         public override Task BeforeDelete(Grupo data)
         {
             if (data.UsuarioGrupos.Any())
-            {
                 throw new ValidationExn("Este grupo possui usuários pertencentes a ele.");
-            }
 
             return Task.CompletedTask;
         }

@@ -17,7 +17,6 @@ namespace TaskTop.Controllers
     [Authorize]
     public class EquipmentController : EntityController<Equipamento, Equipment, int>
     {
-
         public EquipmentController(TaskTopContext ctx, IMapper mapper) : base(ctx, mapper) { }
 
         public override Expression<Func<Equipamento, int>> GetInternalId => ent => ent.Id;
