@@ -241,13 +241,22 @@ namespace TaskTop.Controllers
             if (equip.EmUso == true)
                 throw new ValidationExn("Equipamento já está em uso.");
 
-            DbContext.TarefaEquipamentos.Add(new TarefaEquipamentos
+            var task = await DbContext.Tarefa
+                .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
+                .OrderByDescending(t => t.IniciadoEm)
+                .SingleOrDefaultAsync();
+
+            if (task == null)
+                throw new ValidationExn("Usuário sem tarefas abertas.");
+
+            task.TarefaEquipamentos.Add(new TarefaEquipamentos
             {
                 EquipamentoId = ent.equipmentId
             });
 
             equip.EmUso = true;
 
+            DbContext.Entry(task).State = EntityState.Modified;
             DbContext.Entry(equip).State = EntityState.Modified;
 
             await DbContext.SaveChangesAsync();
