@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TaskTop.DTO;
@@ -16,13 +17,13 @@ namespace TaskTop.Controllers
 {
     public class ChangeEquipment
     {
-        public int taskId { get; set; }
+        public int userId { get; set; }
         public int equipmentId { get; set; }
     }
 
     public class ChangeMaterial
     {
-        public int taskId { get; set; }
+        public int userId { get; set; }
         public int materialId { get; set; }
         public int quantity { get; set; }
     }
@@ -157,19 +158,29 @@ namespace TaskTop.Controllers
             if (material.QuantidadeAtual - ent.quantity < 0)
                 throw new ValidationExn("Estoque insuficiente.");
 
+            var task = await DbContext.Tarefa
+                .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
+                .OrderByDescending(t => t.IniciadoEm)
+                .SingleOrDefaultAsync();
+
+            if (task == null)
+                throw new ValidationExn("Usuário sem tarefas abertas.");
+
             DbContext.EstoqueHistorico.Add(new EstoqueHistorico
             {
                 MaterialId = ent.materialId,
                 Quantidade = ent.quantity,
                 Data = DateTime.UtcNow,
-                TarefaId = ent.taskId,
+                TarefaId = task.Id,
+                Tarefa = task,
                 Tipo = "S",
                 UsuarioId = Operator.Id
             });
 
             DbContext.TarefaMateriais.Add(new TarefaMateriais
             {
-                TarefaId = ent.taskId,
+                Tarefa = task,
+                TarefaId = task.Id,
                 MaterialId = ent.materialId,
                 Quantidade = ent.quantity
             });
@@ -190,12 +201,21 @@ namespace TaskTop.Controllers
             if (material == null)
                 return NotFound();
 
+            var task = await DbContext.Tarefa
+                .Where(t => t.Destino == ent.userId && t.FinalizadoEm == null)
+                .OrderByDescending(t => t.IniciadoEm)
+                .SingleOrDefaultAsync();
+
+            if (task == null)
+                throw new ValidationExn("Usuário sem tarefas abertas.");
+
             DbContext.EstoqueHistorico.Add(new EstoqueHistorico
             {
                 MaterialId = ent.materialId,
                 Quantidade = ent.quantity,
                 Data = DateTime.UtcNow,
-                TarefaId = ent.taskId,
+                Tarefa = task,
+                TarefaId = task.Id,
                 Tipo = "E",
                 UsuarioId = Operator.Id,
             });

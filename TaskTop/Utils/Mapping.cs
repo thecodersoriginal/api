@@ -93,7 +93,7 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.taskId, e=> e.TarefaId)
                 .MapMember(dto => dto.date, e=> e.Data)
                 .MapMember(dto => dto.userName, e=> e.Usuario.Nome)
-                .MapMember(dto => dto.materialName, e=> e.Material.Nome)
+                .MapMember(dto => dto.materialName, e=> e.Material.Descricao)
                 .MapMember(dto => dto.taskName, e=> e.Tarefa.Nome)
                 .ReverseMap();
         };
