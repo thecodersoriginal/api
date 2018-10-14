@@ -40,7 +40,7 @@ GO
 CREATE TABLE [dbo].[Material]
 (
 	[Id] INT IDENTITY (1, 1) NOT NULL,
-	[Descricao] NVARCHAR (45) NOT NULL,
+	[Descricao] NVARCHAR (100) NOT NULL,
 	[QuantidadeAtual] INT NOT NULL,
 	CONSTRAINT [PK_Material] PRIMARY KEY CLUSTERED ([Id] ASC)
 );

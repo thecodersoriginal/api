@@ -40,7 +40,7 @@ namespace TaskTop.Controllers
 
         public override async Task<Usuario> BeforeAdd(User sendedData)
         {
-            if (Operator.Type is UserType.Supervisor && (sendedData.type == (int) UserType.Admin || sendedData.type == (int) UserType.Supervisor))
+            if (Operator.Type is UserType.Supervisor && (sendedData.type == (int)UserType.Admin || sendedData.type == (int)UserType.Supervisor))
                 throw new UnauthorizedExn("Usuário não autorizado para esta operação.");
 
             var usuario = await base.BeforeAdd(sendedData);
@@ -52,21 +52,24 @@ namespace TaskTop.Controllers
             usuario.Senha = pass;
             usuario.Chave = salt;
 
-            foreach (var grupo in sendedData.groups)
+            if (sendedData.groups != null)
             {
-                usuario.UsuarioGrupos.Add(new UsuarioGrupos
+                foreach (var grupo in sendedData.groups)
                 {
-                    GrupoId = grupo.id
-                });
+                    usuario.UsuarioGrupos.Add(new UsuarioGrupos
+                    {
+                        GrupoId = grupo.id
+                    });
+                }
             }
-            
+
             return usuario;
         }
 
         public override async Task<Usuario> BeforeUpdate(Usuario oldData, User changedData)
         {
             var newData = await base.BeforeUpdate(oldData, changedData);
-            newData.Tipo = (int)changedData.type;
+            newData.Tipo = changedData.type;
 
             if (!changedData.password.IsEmpty())
             {

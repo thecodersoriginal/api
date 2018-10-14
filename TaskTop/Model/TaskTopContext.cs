@@ -99,7 +99,7 @@ namespace TaskTop.Model
             {
                 entity.Property(e => e.Descricao)
                     .IsRequired()
-                    .HasMaxLength(45);
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<Tarefa>(entity =>
