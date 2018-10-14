@@ -1,7 +1,7 @@
 ﻿using APICore.Helpers.AutoMapper;
 using AutoMapper;
 using System;
-using TaskTop.Authorization.Model;
+using System.Linq;
 using TaskTop.DTO;
 using TaskTop.Model;
 
@@ -16,6 +16,10 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.phone, us => us.Telefone)
                 .MapMember(dto => dto.type, us => us.Tipo)
                 .MapMember(dto => dto.groups, us => us.UsuarioGrupos)
+                .MapMember(dto => dto.rate, us =>
+                    us.TarefaDestinoNavigation
+                        .DefaultIfEmpty()
+                        .Average(x => (int?) x.Avaliacao.Nota))
                 .IgnoreMember(dto => dto.password)
                 .ReverseMap()
                 .IgnoreMember(us => us.UsuarioGrupos);
@@ -67,7 +71,7 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.finishedAt, t => t.FinalizadoEm)
                 .MapMember(dto => dto.interruptedAt, t => t.InterrompidoEm)
                 .MapMember(dto => dto.repeatInDays, t => t.RepetirEm)
-                .MapMember(dto => dto.equipments, t=> t.TarefaEquipamentos)
+                .MapMember(dto => dto.equipments, t => t.TarefaEquipamentos)
                 .MapMember(dto => dto.materials, t => t.TarefaMateriais)
                 .MapMember(dto => dto.rateId, t => t.AvaliacaoId)
                 .ReverseMap()
@@ -75,26 +79,26 @@ namespace TaskTop.Utils
                 .IgnoreMember(t => t.DestinoNavigation);
 
             cnfg.CreateMap<TarefaEquipamentos, TaskEquipment>()
-                .MapMember(dto=> dto.id, e=> e.EquipamentoId)
+                .MapMember(dto => dto.id, e => e.EquipamentoId)
                 .MapMember(dto => dto.description, e => e.Equipamento.Descricao)
                 .ReverseMap();
 
             cnfg.CreateMap<TarefaMateriais, TaskMaterial>()
                 .MapMember(dto => dto.id, m => m.MaterialId)
                 .MapMember(dto => dto.quantity, m => m.Quantidade)
-                .MapMember(dto => dto.description, m=> m.Material.Descricao)
+                .MapMember(dto => dto.description, m => m.Material.Descricao)
                 .ReverseMap();
 
             cnfg.CreateMap<EstoqueHistorico, StockHistory>()
                 .MapMember(dto => dto.quantity, e => e.Quantidade)
-                .MapMember(dto => dto.type, e=> e.Tipo)
-                .MapMember(dto => dto.userId, e=> e.UsuarioId)
-                .MapMember(dto => dto.materialId, e=> e.MaterialId)
-                .MapMember(dto => dto.taskId, e=> e.TarefaId)
-                .MapMember(dto => dto.date, e=> e.Data)
-                .MapMember(dto => dto.userName, e=> e.Usuario.Nome)
-                .MapMember(dto => dto.materialName, e=> e.Material.Descricao)
-                .MapMember(dto => dto.taskName, e=> e.Tarefa.Nome)
+                .MapMember(dto => dto.type, e => e.Tipo)
+                .MapMember(dto => dto.userId, e => e.UsuarioId)
+                .MapMember(dto => dto.materialId, e => e.MaterialId)
+                .MapMember(dto => dto.taskId, e => e.TarefaId)
+                .MapMember(dto => dto.date, e => e.Data)
+                .MapMember(dto => dto.userName, e => e.Usuario.Nome)
+                .MapMember(dto => dto.materialName, e => e.Material.Descricao)
+                .MapMember(dto => dto.taskName, e => e.Tarefa.Nome)
                 .ReverseMap();
         };
     }

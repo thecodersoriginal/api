@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TaskTop.Authorization.Model;
 
 namespace TaskTop.DTO
 {
@@ -18,6 +17,7 @@ namespace TaskTop.DTO
         public string phone { get; set; }
         public string password { get; set; }
         public int type { get; set; }
+        public double? rate { get; set; }
         public List<UserGroup> groups { get; set; }
     }
 }
