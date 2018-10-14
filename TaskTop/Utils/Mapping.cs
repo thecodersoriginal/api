@@ -14,7 +14,7 @@ namespace TaskTop.Utils
             cnfg.CreateMap<Usuario, User>()
                 .MapMember(dto => dto.name, us => us.Nome)
                 .MapMember(dto => dto.phone, us => us.Telefone)
-                .MapMember(dto => dto.type, us => (UserType)us.Tipo)
+                .MapMember(dto => dto.type, us => us.Tipo)
                 .MapMember(dto => dto.groups, us => us.UsuarioGrupos)
                 .IgnoreMember(dto => dto.password)
                 .ReverseMap()
@@ -69,7 +69,9 @@ namespace TaskTop.Utils
                 .MapMember(dto => dto.repeatInDays, t => t.RepetirEm)
                 .MapMember(dto => dto.equipments, t=> t.TarefaEquipamentos)
                 .MapMember(dto => dto.materials, t => t.TarefaMateriais)
-                .ReverseMap();
+                .ReverseMap()
+                .IgnoreMember(t => t.OrigemNavigation)
+                .IgnoreMember(t => t.DestinoNavigation);
 
             cnfg.CreateMap<TarefaEquipamentos, TaskEquipment>()
                 .MapMember(dto=> dto.id, e=> e.EquipamentoId)

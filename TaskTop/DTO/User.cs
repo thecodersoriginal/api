@@ -17,7 +17,7 @@ namespace TaskTop.DTO
         public string email { get; set; }
         public string phone { get; set; }
         public string password { get; set; }
-        public UserType type { get; set; }
+        public int type { get; set; }
         public List<UserGroup> groups { get; set; }
     }
 }

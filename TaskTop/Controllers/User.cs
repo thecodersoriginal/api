@@ -40,11 +40,11 @@ namespace TaskTop.Controllers
 
         public override async Task<Usuario> BeforeAdd(User sendedData)
         {
-            if (Operator.Type is UserType.Supervisor && (sendedData.type is UserType.Admin || sendedData.type is UserType.Supervisor))
+            if (Operator.Type is UserType.Supervisor && (sendedData.type == (int) UserType.Admin || sendedData.type == (int) UserType.Supervisor))
                 throw new UnauthorizedExn("Usuário não autorizado para esta operação.");
 
             var usuario = await base.BeforeAdd(sendedData);
-            usuario.Tipo = (int)sendedData.type;
+            usuario.Tipo = sendedData.type;
 
             var salt = Auth.GetSalt();
             var pass = Auth.GetPassword(sendedData.password, salt);

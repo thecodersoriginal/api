@@ -45,11 +45,13 @@ namespace TaskTop.Controllers
 
         public override async Task<Tarefa> BeforeAdd(TaskDTO sendedData)
         {
-            var equip = await base.BeforeAdd(sendedData);
-            equip.IniciadoEm = null;
-            equip.FinalizadoEm = null;
-            equip.InterrompidoEm = null;
-            return equip;
+            var tarefa = await base.BeforeAdd(sendedData);
+            tarefa.IniciadoEm = null;
+            tarefa.FinalizadoEm = null;
+            tarefa.InterrompidoEm = null;
+            tarefa.Origem = Operator.Id;
+
+            return tarefa;
         }
 
         [HttpGet, ActionName("start")]
